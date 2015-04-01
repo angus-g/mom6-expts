@@ -1,0 +1,107 @@
+! Computational domain
+REENTRANT_X = True ! zonally reentrant
+TRIPOLAR_N = False ! no northern tripolar connectivity
+NIGLOBAL = 800     ! x-direction grid points
+NJGLOBAL = 400     ! y-direction grid points
+NIHALO = 3         ! halo points
+NJHALO = 3
+NK = 15            ! 15 vertical layers
+
+GRID_CONFIG = "cartesian"        ! (flat) Cartesian grid
+TOPO_CONFIG = "file"             ! read topography from file
+TOPO_FILE = "driver_4km_flat.nc" ! topography file
+TOPO_VARNAME = "topo"            ! name of bathymetry variable in TOPO_FILE
+
+! Horizontal grid parameters
+AXIS_UNITS = "k" ! axes in kilometres
+SOUTHLAT = 0.0   ! starting y value
+LENLAT = 1600.0  ! y-direction length of domain
+WESTLON = 0.0    ! starting x value
+LENLON = 3200.0  ! x-direction length
+EQUATOR_REFERENCE = False
+
+! Parameters providing information about the vertical grid
+MAXIMUM_DEPTH = 4000.0       ! maximum depth of ocean
+MINIMUM_DEPTH = 1.0          ! anything shallower is assumed to be land
+COORD_CONFIG = "linear"      ! linear coords based on interfaces
+GFS = 9.8                    ! reduced gravity at the free surface
+GINT = 9.8E-03               ! reduced gravity of internal interfaces
+THICKNESS_CONFIG = "uniform" ! uniform layer thickness
+ADJUST_THICKNESS = True      ! all mass below the bottom is removed
+
+! Equation of state
+ENABLE_THERMODYNAMICS = True ! use temperature and salinity for state
+USE_EOS = True               ! calculate density from T/S
+EQN_OF_STATE = "LINEAR"      ! use linear equation of state
+BULKMIXEDLAYER = False       ! don't use a bulk mixed layer
+                             ! (incompatible with ALE)
+
+! Initial state
+TS_CONFIG = linear ! initialise linear profiles for T and S given reference
+                   ! surface T/S and a range. distribution is linear with
+                   ! respect to layers
+T_TOP = 12.0       ! top surface temperature (C)
+T_RANGE = 10.0     ! temperature range (top - bottom)
+S_TOP = 35.0       ! top surface salinity (PSU)
+S_RANGE = 0.0      ! constant salinity throughout the domain
+
+! Physical parameters
+ROTATION = "betaplane"   ! beta plane Coriolis parameter
+F_0 = -1.0e-4            ! reference Coriolis value for beta plane
+BETA = 1.5e-11           ! df/dy term
+VELOCITY_CONFIG = "zero" ! fluid initially at rest
+RHO_0 = 1025.0           ! mean ocean density used with BOUSSINESQ true to
+                         ! calculate accelerations and mass for conservation
+
+! Time integration parameters
+DT_FORCING = 2400.0 ! time step for changing forcing
+DT_THERM = 2400.0   ! thermodynamic timestep
+DT = 480.0          ! baroclinic dynamics timestep
+DTBT = 12.0         ! barotropic timestep
+BE = 0.7            ! ratio from neutral baroclinic (0.5) to backward Euler
+BEBT = 0.2          ! ratio from forward-backward to backward Euler
+
+! Viscosity parameters
+AH = 1.5e9             ! biharmonic horizontal viscosity
+CORIOLIS_EN_DIS = True ! two estimates of the thickness fluxes are used to
+                       ! estimate the Coriolis term, and the one that
+                       ! dissipates energy relative to the other one is used
+DIRECT_STRESS = True   ! wind stress is distributed over the topmost HMIX_STRESS
+HMIX_FIXED = 20.0
+KVML = 1.00e-2         ! kinematic viscosity in the mixed layer
+KDML = 1.00e-4         ! diapycnal diffusivity of density in the mixed layer
+KV = 1.00e-4           ! kinematic viscosity in the interior
+KD = 0.0               ! diapycnal diffusivity of density in the interior
+MAX_ENT_IT = 20        ! maximum number of iterations to calculate interior
+                       ! diapycnal entrainment
+
+! Bottom drag
+BOTTOMDRAGLAW = True ! bottom stress of the form c_drag*|u|*u
+HBBL = 10.0          ! thickness over which near-bottom velocities are averaged
+DRAG_BG_VEL = 0.1    ! unresolved velocity to combine with resolved velocity to
+                     ! estimate the velocity magnitude
+BBL_THICK_MIN = 0.1  ! minimum bottom boundary layer thickness
+
+! Surface forcing
+BUOY_CONFIG = "zero"       ! no buoyancy forcing
+VARIABLE_BUOYFORCE = False ! buoyancy is time-invariant
+WIND_CONFIG = "file"       ! read wind forcing from file
+VARIABLE_WINDS = False     ! winds are time-invariant
+WIND_FILE = "wind.nc"
+WINDSTRESS_X_VAR = "STRESS_X"
+WINDSTRESS_Y_VAR = "STRESS_Y"
+
+! Simulation parameters
+BOUND_BT_CORRECTION = True ! corrective pseudo mass-fluxes into the
+                           ! barotropic solver are limited to values that
+                           ! require less than 0.1*MAXVEL
+MAXVEL = 20.0              ! maximum velocity before truncation
+MAXTRUNC = 25              ! maximum number of velocity truncations between
+                           ! energy saves
+U_TRUNC_FILE = "U_velocity_truncations"
+V_TRUNC_FILE = "V_velocity_truncations"
+
+! I/O and simulation length
+DAYMAX = 2000.0 ! run for 2000 days
+ENERGYSAVEDAYS = 1.0 ! days between saves of energies
+INPUTDIR = "INPUT"

@@ -1,0 +1,2 @@
+USE_REGRIDDING = True             ! use ALE regridding
+REGRIDDING_COORDINATE_MODE = "Z*" ! regrid onto z* coordinate

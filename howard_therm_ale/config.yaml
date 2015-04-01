@@ -1,0 +1,11 @@
+ncpus: 128
+walltime: 03:00:00
+mem: 150GB
+jobname: wind-ale
+
+collate_walltime: 0:30:00
+collate_mem: 1GB
+
+model: mom6
+exe: MOM6
+input: howard
